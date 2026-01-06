@@ -10,10 +10,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
     </style>
 </head>
@@ -135,21 +135,21 @@
                 return (
                     <div className="min-h-screen bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 flex items-center justify-center p-4 sm:p-6">
                         <div className="bg-white shadow-2xl rounded-3xl p-8 sm:p-12 max-w-md w-full">
-                            <h1 className="text-4xl sm:text-5xl font-bold text-amber-600 text-center mb-2 sm:mb-3 tracking-tight">workout tracker</h1>
-                            <p className="text-center text-stone-600 mb-8 sm:mb-10 text-sm">why you haven't made it yet</p>
+                            <h1 className="text-4xl sm:text-5xl font-light text-amber-600 text-center mb-2 sm:mb-3 tracking-tight">Workout Tracker</h1>
+                            <p className="text-center text-stone-600 mb-8 sm:mb-10 text-sm">Track your journey, celebrate your progress</p>
                             <input
                                 type="text"
                                 value={userName}
                                 onChange={e => setUserName(e.target.value)}
                                 onKeyPress={e => e.key === 'Enter' && login()}
-                                placeholder="enter your name"
+                                placeholder="Enter your name"
                                 className="w-full bg-amber-50 border-2 border-amber-200 rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-stone-800 text-base mb-4 sm:mb-5 placeholder-amber-400 focus:outline-none focus:border-amber-500 transition"
                             />
                             <button
                                 onClick={login}
-                                className="w-full bg-amber-500 text-white py-3 sm:py-4 rounded-2xl font-semibold text-base hover:bg-amber-600 shadow-lg transition-all active:scale-95"
+                                className="w-full bg-amber-500 text-white py-3 sm:py-4 rounded-2xl font-medium text-base hover:bg-amber-600 shadow-lg transition-all active:scale-95"
                             >
-                                let's go
+                                Begin
                             </button>
                         </div>
                     </div>
@@ -164,60 +164,60 @@
                         <div className="max-w-7xl mx-auto">
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8 sm:mb-10">
                                 <div>
-                                    <h1 className="text-3xl sm:text-4xl font-bold text-amber-600 tracking-tight">hey {currentUser}!</h1>
-                                    <p className="text-stone-600 mt-1">time to move</p>
+                                    <h1 className="text-3xl sm:text-4xl font-light text-amber-600 tracking-tight">Welcome back, {currentUser}</h1>
+                                    <p className="text-stone-600 mt-1">Ready to build your strength today</p>
                                 </div>
-                                <button onClick={() => { setCurrentUser(null); setPage('login'); }} className="text-stone-600 hover:text-amber-600 transition text-sm self-start sm:self-auto font-medium">
-                                    switch profile
+                                <button onClick={() => { setCurrentUser(null); setPage('login'); }} className="text-stone-600 hover:text-amber-600 transition text-sm self-start sm:self-auto">
+                                    Switch Profile
                                 </button>
                             </div>
 
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 mb-8 sm:mb-10">
                                 <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-md border-2 border-amber-200">
-                                    <div className="text-amber-600 text-xs sm:text-sm mb-1 font-medium">total</div>
-                                    <div className="text-stone-800 text-3xl sm:text-4xl font-bold">{myWorkouts.length}</div>
+                                    <div className="text-amber-600 text-xs sm:text-sm mb-1 font-light">Total Workouts</div>
+                                    <div className="text-stone-800 text-3xl sm:text-4xl font-light">{myWorkouts.length}</div>
                                 </div>
                                 <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-md border-2 border-amber-200">
-                                    <div className="text-amber-600 text-xs sm:text-sm mb-1 font-medium">workout a</div>
-                                    <div className="text-stone-800 text-3xl sm:text-4xl font-bold">{myWorkouts.filter(w => w.type === 'A').length}</div>
+                                    <div className="text-amber-600 text-xs sm:text-sm mb-1 font-light">Workout A</div>
+                                    <div className="text-stone-800 text-3xl sm:text-4xl font-light">{myWorkouts.filter(w => w.type === 'A').length}</div>
                                 </div>
                                 <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-md border-2 border-amber-200">
-                                    <div className="text-amber-600 text-xs sm:text-sm mb-1 font-medium">workout b</div>
-                                    <div className="text-stone-800 text-3xl sm:text-4xl font-bold">{myWorkouts.filter(w => w.type === 'B').length}</div>
+                                    <div className="text-amber-600 text-xs sm:text-sm mb-1 font-light">Workout B</div>
+                                    <div className="text-stone-800 text-3xl sm:text-4xl font-light">{myWorkouts.filter(w => w.type === 'B').length}</div>
                                 </div>
                                 <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-md border-2 border-amber-200">
-                                    <div className="text-amber-600 text-xs sm:text-sm mb-1 font-medium">workout c</div>
-                                    <div className="text-stone-800 text-3xl sm:text-4xl font-bold">{myWorkouts.filter(w => w.type === 'C').length}</div>
+                                    <div className="text-amber-600 text-xs sm:text-sm mb-1 font-light">Workout C</div>
+                                    <div className="text-stone-800 text-3xl sm:text-4xl font-light">{myWorkouts.filter(w => w.type === 'C').length}</div>
                                 </div>
                             </div>
 
-                            <h2 className="text-xl sm:text-2xl font-bold text-amber-600 mb-4 sm:mb-5 tracking-tight">start workout</h2>
+                            <h2 className="text-xl sm:text-2xl font-light text-amber-600 mb-4 sm:mb-5 tracking-tight">Start Your Practice</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 mb-10 sm:mb-12">
                                 {['A', 'B', 'C'].map(type => (
                                     <button
                                         key={type}
                                         onClick={() => startWorkout(type)}
-                                        className="bg-amber-500 text-white py-10 sm:py-12 rounded-2xl text-2xl sm:text-3xl font-bold hover:bg-amber-600 shadow-lg hover:shadow-xl transition-all tracking-wide active:scale-95"
+                                        className="bg-amber-500 text-white py-10 sm:py-12 rounded-2xl text-2xl sm:text-3xl font-light hover:bg-amber-600 shadow-lg hover:shadow-xl transition-all tracking-wide active:scale-95"
                                     >
-                                        workout {type}
+                                        Workout {type}
                                     </button>
                                 ))}
                             </div>
 
-                            <h2 className="text-xl sm:text-2xl font-bold text-amber-600 mb-4 sm:mb-5 tracking-tight">your history</h2>
+                            <h2 className="text-xl sm:text-2xl font-light text-amber-600 mb-4 sm:mb-5 tracking-tight">Your Progress</h2>
                             {workouts.length > 0 ? (
                                 <div className="bg-white rounded-2xl overflow-hidden shadow-md border-2 border-amber-200">
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-sm">
                                             <thead className="bg-amber-50">
                                                 <tr>
-                                                    <th className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-semibold whitespace-nowrap">date</th>
-                                                    <th className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-semibold whitespace-nowrap">user</th>
-                                                    <th className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-semibold whitespace-nowrap">type</th>
+                                                    <th className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-medium whitespace-nowrap">Date</th>
+                                                    <th className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-medium whitespace-nowrap">User</th>
+                                                    <th className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-medium whitespace-nowrap">Type</th>
                                                     {WORKOUTS.A.map((ex, i) => (
-                                                        <th key={i} className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-semibold whitespace-nowrap">{ex.name}</th>
+                                                        <th key={i} className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-medium whitespace-nowrap">{ex.name}</th>
                                                     ))}
-                                                    <th className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-semibold whitespace-nowrap">actions</th>
+                                                    <th className="text-left text-stone-700 p-2 sm:p-4 text-xs sm:text-sm font-medium whitespace-nowrap">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -226,7 +226,7 @@
                                                         <td className="text-stone-800 p-2 sm:p-4 text-xs sm:text-sm whitespace-nowrap">{w.date}</td>
                                                         <td className="text-stone-700 p-2 sm:p-4 text-xs sm:text-sm whitespace-nowrap">{w.user}</td>
                                                         <td className="p-2 sm:p-4">
-                                                            <span className="bg-amber-500 px-2 sm:px-3 py-1 rounded-full text-white text-xs font-semibold">{w.type}</span>
+                                                            <span className="bg-amber-500 px-2 sm:px-3 py-1 rounded-full text-white text-xs font-medium">{w.type}</span>
                                                         </td>
                                                         {w.exercises.map((ex, i) => {
                                                             const bestSet = ex.sets.reduce((best, s) => {
@@ -238,7 +238,7 @@
                                                                 <td key={i} className="text-stone-700 p-2 sm:p-4 text-xs">
                                                                     {bestSet.reps ? (
                                                                         <div>
-                                                                            <div className="text-stone-800 font-bold">{bestSet.reps}r</div>
+                                                                            <div className="text-stone-800 font-semibold">{bestSet.reps}r</div>
                                                                             {bestSet.weight && <div className="text-stone-600">{bestSet.weight}lb</div>}
                                                                         </div>
                                                                     ) : <span className="text-stone-400">—</span>}
@@ -247,8 +247,8 @@
                                                         })}
                                                         <td className="p-2 sm:p-4">
                                                             {w.user === currentUser && (
-                                                                <button onClick={() => deleteWorkout(w.id)} className="text-red-600 hover:text-red-700 text-xs sm:text-sm font-semibold">
-                                                                    delete
+                                                                <button onClick={() => deleteWorkout(w.id)} className="text-red-600 hover:text-red-700 text-xs sm:text-sm font-medium">
+                                                                    Delete
                                                                 </button>
                                                             )}
                                                         </td>
@@ -260,7 +260,7 @@
                                 </div>
                             ) : (
                                 <div className="text-center text-stone-600 py-16 sm:py-20 bg-white rounded-2xl border-2 border-amber-200 shadow-sm">
-                                    <p className="text-base sm:text-lg">no workouts yet – let's change that</p>
+                                    <p className="text-base sm:text-lg font-light">Your fitness journey starts here</p>
                                 </div>
                             )}
                         </div>
