@@ -1,256 +1,192 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Plus, ChevronRight, Save, Trash2, ChevronLeft, TrendingUp, User, LogOut, BarChart3 } from 'lucide-react';
+import { Save, X, ChevronLeft, ChevronRight, User, TrendingUp, Trash2 } from 'lucide-react';
 
-const workoutPrograms = {
+const WORKOUTS = {
   A: [
-    { name: 'Australian Pullups', sets: [{ target: '8-10', note: 'RPE 7-8 Goal' }, { target: '8-10', note: 'RPE 7-8 Goal' }, { target: '8-10', note: 'To failure' }] },
-    { name: 'Goblet Squats', sets: [{ target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'To failure' }] },
-    { name: 'Superman Lateral Raise', sets: [{ target: '15', note: 'RPE 7-8 Goal' }, { target: '15', note: 'RPE 7-8 Goal' }, { target: '15', note: 'To failure' }] },
-    { name: 'Pushups', sets: [{ target: '20', note: 'RPE 7-8 Goal' }, { target: '20', note: 'RPE 7-8 Goal' }, { target: '20', note: 'To failure' }] },
-    { name: 'Glute Bridge Walkout', sets: [{ target: '10-15', note: 'RPE 7-8 Goal' }, { target: '10-15', note: 'RPE 7-8 Goal' }, { target: '10-15', note: 'To failure' }] },
-    { name: 'Deadlift Rotate Romanian', sets: [{ target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }] },
-    { name: 'Hanging Knee Raises', sets: [{ target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }] },
-    { name: 'Scapular Shrugs', sets: [{ target: '15', note: 'RPE 7-8 Goal' }, { target: '15', note: 'RPE 7-8 Goal' }, { target: '15', note: 'RPE 7-8 Goal' }] },
-    { name: 'Bench Curls', sets: [{ target: '8-14', note: '' }, { target: '8-14', note: '' }, { target: '8-14', note: '' }] }
+    { name: 'Australian Pullups', sets: 3, target: '8-10' },
+    { name: 'Goblet Squats', sets: 3, target: '8-12' },
+    { name: 'Superman Lateral Raise', sets: 3, target: '15' },
+    { name: 'Pushups', sets: 3, target: '20' },
+    { name: 'Glute Bridge Walkout', sets: 3, target: '10-15' },
+    { name: 'Deadlift Rotate Romanian', sets: 3, target: '8-12' },
+    { name: 'Hanging Knee Raises', sets: 3, target: '8-12' },
+    { name: 'Scapular Shrugs', sets: 3, target: '15' },
+    { name: 'Bench Curls', sets: 3, target: '8-14' }
   ],
   B: [
-    { name: 'Pull-ups/Chin-ups', sets: [{ target: '5-8', note: 'RPE 7-8 Goal' }, { target: '5-8', note: 'RPE 7-8 Goal' }, { target: '5-8', note: 'To failure' }] },
-    { name: 'Bulgarian Split Squats', sets: [{ target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'To failure' }] },
-    { name: 'Pike Push-ups', sets: [{ target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'To failure' }] },
-    { name: 'Dips', sets: [{ target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'To failure' }] },
-    { name: 'Nordic Curls', sets: [{ target: '5-8', note: 'RPE 7-8 Goal' }, { target: '5-8', note: 'RPE 7-8 Goal' }, { target: '5-8', note: 'To failure' }] },
-    { name: 'Single Leg Deadlift', sets: [{ target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }] },
-    { name: 'Leg Raises', sets: [{ target: '10-15', note: 'RPE 7-8 Goal' }, { target: '10-15', note: 'RPE 7-8 Goal' }, { target: '10-15', note: 'RPE 7-8 Goal' }] },
-    { name: 'Plank', sets: [{ target: '45-60s', note: 'Hold' }, { target: '45-60s', note: 'Hold' }, { target: '45-60s', note: 'Hold' }] }
+    { name: 'Pull-ups/Chin-ups', sets: 3, target: '5-8' },
+    { name: 'Bulgarian Split Squats', sets: 3, target: '8-12' },
+    { name: 'Pike Push-ups', sets: 3, target: '8-12' },
+    { name: 'Dips', sets: 3, target: '8-12' },
+    { name: 'Nordic Curls', sets: 3, target: '5-8' },
+    { name: 'Single Leg Deadlift', sets: 3, target: '8-12' },
+    { name: 'Leg Raises', sets: 3, target: '10-15' },
+    { name: 'Plank', sets: 3, target: '45-60s' }
   ],
   C: [
-    { name: 'Archer Push-ups', sets: [{ target: '6-10', note: 'RPE 7-8 Goal' }, { target: '6-10', note: 'RPE 7-8 Goal' }, { target: '6-10', note: 'To failure' }] },
-    { name: 'Pistol Squats', sets: [{ target: '5-8', note: 'RPE 7-8 Goal' }, { target: '5-8', note: 'RPE 7-8 Goal' }, { target: '5-8', note: 'To failure' }] },
-    { name: 'Handstand Push-ups', sets: [{ target: '3-8', note: 'RPE 7-8 Goal' }, { target: '3-8', note: 'RPE 7-8 Goal' }, { target: '3-8', note: 'To failure' }] },
-    { name: 'Diamond Push-ups', sets: [{ target: '10-15', note: 'RPE 7-8 Goal' }, { target: '10-15', note: 'RPE 7-8 Goal' }, { target: '10-15', note: 'To failure' }] },
-    { name: 'Single Leg Glute Bridge', sets: [{ target: '12-15', note: 'RPE 7-8 Goal' }, { target: '12-15', note: 'RPE 7-8 Goal' }, { target: '12-15', note: 'To failure' }] },
-    { name: 'L-Sit Hold', sets: [{ target: '15-30s', note: 'Hold' }, { target: '15-30s', note: 'Hold' }, { target: '15-30s', note: 'Hold' }] },
-    { name: 'Windshield Wipers', sets: [{ target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }, { target: '8-12', note: 'RPE 7-8 Goal' }] },
-    { name: 'Face Pulls', sets: [{ target: '12-15', note: 'RPE 7-8 Goal' }, { target: '12-15', note: 'RPE 7-8 Goal' }, { target: '12-15', note: 'RPE 7-8 Goal' }] }
+    { name: 'Archer Push-ups', sets: 3, target: '6-10' },
+    { name: 'Pistol Squats', sets: 3, target: '5-8' },
+    { name: 'Handstand Push-ups', sets: 3, target: '3-8' },
+    { name: 'Diamond Push-ups', sets: 3, target: '10-15' },
+    { name: 'Single Leg Glute Bridge', sets: 3, target: '12-15' },
+    { name: 'L-Sit Hold', sets: 3, target: '15-30s' },
+    { name: 'Windshield Wipers', sets: 3, target: '8-12' },
+    { name: 'Face Pulls', sets: 3, target: '12-15' }
   ]
 };
 
-const effortLevels = [
-  { value: 0, label: 'Easy', desc: '3+ more reps' },
-  { value: 1, label: 'Medium', desc: '2 more reps' },
-  { value: 2, label: 'Hard', desc: '1 more rep' },
-  { value: 3, label: 'Max', desc: 'No more reps' }
-];
+const EFFORT = ['Easy (3+ left)', 'Medium (2 left)', 'Hard (1 left)', 'Max (0 left)'];
 
-export default function WorkoutTracker() {
-  const [view, setView] = useState('login');
-  const [currentUser, setCurrentUser] = useState(null);
-  const [users, setUsers] = useState([]);
-  const [workouts, setWorkouts] = useState([]);
-  const [currentWorkout, setCurrentWorkout] = useState(null);
-  const [selectedExercise, setSelectedExercise] = useState(null);
-  const [viewingWorkout, setViewingWorkout] = useState(null);
-  const [newUserName, setNewUserName] = useState('');
+export default function WorkoutApp() {
+  const [screen, setScreen] = useState('profiles');
+  const [profiles, setProfiles] = useState([]);
+  const [currentProfile, setCurrentProfile] = useState(null);
+  const [newProfileName, setNewProfileName] = useState('');
+  const [allWorkouts, setAllWorkouts] = useState([]);
+  const [activeWorkout, setActiveWorkout] = useState(null);
+  const [exerciseIndex, setExerciseIndex] = useState(0);
 
   useEffect(() => {
-    loadUsers();
+    loadProfiles();
   }, []);
 
   useEffect(() => {
-    if (currentUser) {
-      loadWorkouts();
+    if (currentProfile) {
+      loadAllWorkouts();
     }
-  }, [currentUser]);
+  }, [currentProfile]);
 
-  const loadUsers = async () => {
+  const loadProfiles = async () => {
     try {
-      const result = await window.storage.get('users');
-      if (result) {
-        setUsers(JSON.parse(result.value));
-      }
-    } catch (error) {
-      console.log('No users yet');
+      const res = await window.storage.get('profiles');
+      if (res) setProfiles(JSON.parse(res.value));
+    } catch (e) {
+      console.log('No profiles');
     }
   };
 
-  const createUser = async () => {
-    if (!newUserName.trim()) return;
-    const newUser = {
-      id: Date.now(),
-      name: newUserName.trim()
-    };
-    const updatedUsers = [...users, newUser];
+  const createProfile = async () => {
+    if (!newProfileName.trim()) return;
+    const profile = { id: Date.now(), name: newProfileName.trim() };
+    const updated = [...profiles, profile];
+    await window.storage.set('profiles', JSON.stringify(updated));
+    setProfiles(updated);
+    setCurrentProfile(profile);
+    setNewProfileName('');
+    setScreen('home');
+  };
+
+  const loadAllWorkouts = async () => {
+    if (!currentProfile) return;
     try {
-      await window.storage.set('users', JSON.stringify(updatedUsers));
-      setUsers(updatedUsers);
-      setCurrentUser(newUser);
-      setNewUserName('');
-      setView('home');
-    } catch (error) {
-      alert('Error creating user');
-    }
-  };
-
-  const selectUser = (user) => {
-    setCurrentUser(user);
-    setView('home');
-  };
-
-  const logout = () => {
-    setCurrentUser(null);
-    setView('login');
-    setWorkouts([]);
-  };
-
-  const loadWorkouts = async () => {
-    if (!currentUser) return;
-    await loadWorkoutsForUser(currentUser);
-  };
-
-  const loadWorkoutsForUser = async (user) => {
-    try {
-      const keys = await window.storage.list(`workout:${user.id}:`);
-      if (keys && keys.keys) {
-        const allWorkouts = [];
+      const keys = await window.storage.list('workout:');
+      const workouts = [];
+      if (keys?.keys) {
         for (const key of keys.keys) {
-          const result = await window.storage.get(key);
-          if (result) {
-            allWorkouts.push(JSON.parse(result.value));
-          }
+          const res = await window.storage.get(key);
+          if (res) workouts.push(JSON.parse(res.value));
         }
-        setWorkouts(allWorkouts.sort((a, b) => new Date(b.date) - new Date(a.date)));
-      } else {
-        setWorkouts([]);
       }
-    } catch (error) {
-      console.log('No saved workouts yet');
-      setWorkouts([]);
+      setAllWorkouts(workouts.sort((a, b) => new Date(b.date) - new Date(a.date)));
+    } catch (e) {
+      console.log('No workouts');
+      setAllWorkouts([]);
     }
   };
 
-  const startNewWorkout = (programType) => {
-    const exercises = workoutPrograms[programType];
-    const workout = {
+  const startWorkout = (type) => {
+    const exercises = WORKOUTS[type].map(ex => ({
+      name: ex.name,
+      target: ex.target,
+      sets: Array(ex.sets).fill(null).map(() => ({ reps: '', weight: '', effort: null }))
+    }));
+    setActiveWorkout({
       id: Date.now(),
-      userId: currentUser.id,
+      profileId: currentProfile.id,
+      profileName: currentProfile.name,
+      type,
       date: new Date().toISOString().split('T')[0],
-      type: programType,
-      exercises: exercises.map(ex => ({
-        name: ex.name,
-        sets: ex.sets.map(set => ({
-          target: set.target,
-          note: set.note,
-          reps: '',
-          weight: '',
-          effort: null,
-          rest: ''
-        }))
-      }))
-    };
-    setCurrentWorkout(workout);
-    setSelectedExercise(0);
-    setView('workout');
+      exercises
+    });
+    setExerciseIndex(0);
+    setScreen('workout');
   };
 
   const saveWorkout = async () => {
-    try {
-      await window.storage.set(`workout:${currentUser.id}:${currentWorkout.id}`, JSON.stringify(currentWorkout));
-      await loadWorkouts();
-      setCurrentWorkout(null);
-      setSelectedExercise(null);
-      setView('home');
-    } catch (error) {
-      alert('Error saving workout');
+    await window.storage.set(`workout:${activeWorkout.id}`, JSON.stringify(activeWorkout));
+    await loadAllWorkouts();
+    setActiveWorkout(null);
+    setExerciseIndex(0);
+    setScreen('home');
+  };
+
+  const exitWorkout = () => {
+    if (confirm('Exit without saving?')) {
+      setActiveWorkout(null);
+      setExerciseIndex(0);
+      setScreen('home');
     }
   };
 
-  const cancelWorkout = () => {
-    if (confirm('Are you sure you want to cancel this workout? Your progress will not be saved.')) {
-      setCurrentWorkout(null);
-      setSelectedExercise(null);
-      setView('home');
-    }
+  const updateSet = (setIdx, field, value) => {
+    const updated = { ...activeWorkout };
+    updated.exercises[exerciseIndex].sets[setIdx][field] = value;
+    setActiveWorkout(updated);
   };
 
   const deleteWorkout = async (id) => {
-    if (confirm('Delete this workout?')) {
-      try {
-        await window.storage.delete(`workout:${currentUser.id}:${id}`);
-        await loadWorkouts();
-        setViewingWorkout(null);
-        setView('home');
-      } catch (error) {
-        alert('Error deleting workout');
-      }
+    if (confirm('Delete workout?')) {
+      await window.storage.delete(`workout:${id}`);
+      await loadAllWorkouts();
     }
   };
 
-  const updateSet = (exerciseIdx, setIdx, field, value) => {
-    const updated = { ...currentWorkout };
-    updated.exercises[exerciseIdx].sets[setIdx][field] = value;
-    setCurrentWorkout(updated);
+  const getPreviousWorkout = () => {
+    if (!activeWorkout || !currentProfile) return null;
+    return allWorkouts.find(w => 
+      w.type === activeWorkout.type && 
+      w.profileId === currentProfile.id && 
+      w.id !== activeWorkout.id
+    );
   };
 
-  const viewWorkoutHistory = (workout) => {
-    setViewingWorkout(workout);
-    setView('history');
-  };
-
-  const getWorkoutStats = () => {
-    const stats = {
-      A: workouts.filter(w => w.type === 'A').length,
-      B: workouts.filter(w => w.type === 'B').length,
-      C: workouts.filter(w => w.type === 'C').length
-    };
-    return stats;
-  };
-
-  const getPreviousWorkout = (type) => {
-    const previousWorkouts = workouts.filter(w => w.type === type && w.id !== currentWorkout?.id);
-    return previousWorkouts.length > 0 ? previousWorkouts[0] : null;
-  };
-
-  if (view === 'login') {
+  // PROFILE SCREEN
+  if (screen === 'profiles') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6 flex items-center justify-center">
         <div className="max-w-md w-full">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-white mb-2">Calisthenics Tracker</h1>
-            <p className="text-purple-200">Phase 1 Program</p>
-          </div>
-
-          {users.length > 0 && (
+          <h1 className="text-4xl font-bold text-white text-center mb-8">Workout Tracker</h1>
+          
+          {profiles.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-white text-lg font-semibold mb-3">Select Profile</h2>
-              <div className="space-y-2">
-                {users.map(user => (
-                  <button
-                    key={user.id}
-                    onClick={() => selectUser(user)}
-                    className="w-full bg-white/10 backdrop-blur-lg rounded-lg p-4 border border-white/20 hover:bg-white/20 transition flex items-center gap-3"
-                  >
-                    <User className="text-purple-300" size={24} />
-                    <span className="text-white font-semibold text-lg">{user.name}</span>
-                  </button>
-                ))}
-              </div>
+              <h2 className="text-white text-lg mb-3">Select Profile</h2>
+              {profiles.map(p => (
+                <button
+                  key={p.id}
+                  onClick={() => { setCurrentProfile(p); setScreen('home'); }}
+                  className="w-full bg-white/10 border border-white/20 rounded-lg p-4 mb-2 text-white hover:bg-white/20 flex items-center gap-3"
+                >
+                  <User size={20} className="text-purple-300" />
+                  {p.name}
+                </button>
+              ))}
             </div>
           )}
 
           <div>
-            <h2 className="text-white text-lg font-semibold mb-3">Create New Profile</h2>
+            <h2 className="text-white text-lg mb-3">Create Profile</h2>
             <div className="flex gap-2">
               <input
                 type="text"
-                value={newUserName}
-                onChange={(e) => setNewUserName(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && createUser()}
-                placeholder="Enter your name"
-                className="flex-1 bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                value={newProfileName}
+                onChange={e => setNewProfileName(e.target.value)}
+                onKeyPress={e => e.key === 'Enter' && createProfile()}
+                placeholder="Enter name"
+                className="flex-1 bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-purple-300"
               />
               <button
-                onClick={createUser}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition"
+                onClick={createProfile}
+                className="bg-purple-600 text-white px-6 rounded-lg font-semibold hover:bg-purple-700"
               >
                 Create
               </button>
@@ -261,52 +197,59 @@ export default function WorkoutTracker() {
     );
   }
 
-  if (view === 'home') {
-    const stats = getWorkoutStats();
+  // HOME SCREEN
+  if (screen === 'home' && currentProfile) {
+    const myWorkouts = allWorkouts.filter(w => w.profileId === currentProfile.id);
+    const stats = {
+      total: myWorkouts.length,
+      A: myWorkouts.filter(w => w.type === 'A').length,
+      B: myWorkouts.filter(w => w.type === 'B').length,
+      C: myWorkouts.filter(w => w.type === 'C').length
+    };
+
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-8 pt-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-1">Welcome back, {currentUser.name}!</h1>
-              <p className="text-purple-200">Phase 1 Program</p>
+              <h1 className="text-3xl font-bold text-white">Hey {currentProfile.name}! 💪</h1>
+              <p className="text-purple-300">Phase 1 Program</p>
             </div>
             <button
-              onClick={logout}
-              className="flex items-center gap-2 text-purple-200 hover:text-white transition"
+              onClick={() => { setCurrentProfile(null); setScreen('profiles'); }}
+              className="text-purple-300 hover:text-white"
             >
-              <LogOut size={20} />
-              Logout
+              Switch Profile
             </button>
           </div>
 
           <div className="grid grid-cols-4 gap-4 mb-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-4 border border-white/20">
-              <div className="text-purple-300 text-sm mb-1">Total Workouts</div>
-              <div className="text-white text-3xl font-bold">{workouts.length}</div>
+            <div className="bg-white/10 border border-white/20 rounded-lg p-4">
+              <div className="text-purple-300 text-sm">Total</div>
+              <div className="text-white text-3xl font-bold">{stats.total}</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-4 border border-white/20">
-              <div className="text-purple-300 text-sm mb-1">Workout A</div>
+            <div className="bg-white/10 border border-white/20 rounded-lg p-4">
+              <div className="text-purple-300 text-sm">Workout A</div>
               <div className="text-white text-3xl font-bold">{stats.A}</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-4 border border-white/20">
-              <div className="text-purple-300 text-sm mb-1">Workout B</div>
+            <div className="bg-white/10 border border-white/20 rounded-lg p-4">
+              <div className="text-purple-300 text-sm">Workout B</div>
               <div className="text-white text-3xl font-bold">{stats.B}</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-4 border border-white/20">
-              <div className="text-purple-300 text-sm mb-1">Workout C</div>
+            <div className="bg-white/10 border border-white/20 rounded-lg p-4">
+              <div className="text-purple-300 text-sm">Workout C</div>
               <div className="text-white text-3xl font-bold">{stats.C}</div>
             </div>
           </div>
 
           <div className="mb-8">
-            <h2 className="text-white text-xl font-semibold mb-4">Start New Workout</h2>
-            <div className="grid grid-cols-3 gap-3">
+            <h2 className="text-xl font-bold text-white mb-4">Start Workout</h2>
+            <div className="grid grid-cols-3 gap-4">
               {['A', 'B', 'C'].map(type => (
                 <button
                   key={type}
-                  onClick={() => startNewWorkout(type)}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-6 rounded-lg font-bold text-2xl hover:from-purple-700 hover:to-pink-700 transition"
+                  onClick={() => startWorkout(type)}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-8 rounded-lg text-2xl font-bold hover:from-purple-700 hover:to-pink-700"
                 >
                   Workout {type}
                 </button>
@@ -314,266 +257,201 @@ export default function WorkoutTracker() {
             </div>
           </div>
 
-          <div className="mb-4">
-            <h2 className="text-white text-xl font-semibold">Workout History</h2>
-          </div>
-
-          {workouts.length > 0 ? (
-            <div className="bg-white/10 backdrop-blur-lg rounded-lg border border-white/20 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-white/5">
-                    <tr>
-                      <th className="text-left text-purple-200 font-semibold p-4">Date</th>
-                      <th className="text-left text-purple-200 font-semibold p-4">Type</th>
-                      <th className="text-left text-purple-200 font-semibold p-4">Progress</th>
-                      <th className="text-left text-purple-200 font-semibold p-4">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {workouts.map((workout, idx) => (
-                      <tr key={workout.id} className={`border-t border-white/10 hover:bg-white/5 transition ${idx % 2 === 0 ? 'bg-white/5' : ''}`}>
-                        <td className="text-white p-4">{new Date(workout.date).toLocaleDateString()}</td>
-                        <td className="text-white p-4">
-                          <span className="inline-block bg-purple-600 px-3 py-1 rounded-full text-sm font-semibold">
-                            Workout {workout.type}
-                          </span>
-                        </td>
-                        <td className="text-purple-200 p-4">
-                          {workout.exercises.filter(e => e.sets.some(s => s.reps)).length} / {workout.exercises.length} exercises
-                        </td>
-                        <td className="p-4">
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => viewWorkoutHistory(workout)}
-                              className="text-purple-300 hover:text-white transition"
-                            >
-                              <BarChart3 size={20} />
-                            </button>
-                            <button
-                              onClick={() => deleteWorkout(workout.id)}
-                              className="text-red-400 hover:text-red-300 transition"
-                            >
-                              <Trash2 size={20} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
+          <h2 className="text-xl font-bold text-white mb-4">History</h2>
+          {allWorkouts.length > 0 ? (
+            <div className="bg-white/10 border border-white/20 rounded-lg overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-white/5">
+                  <tr>
+                    <th className="text-left text-purple-300 p-3">Date</th>
+                    <th className="text-left text-purple-300 p-3">Person</th>
+                    <th className="text-left text-purple-300 p-3">Type</th>
+                    {WORKOUTS.A.map((ex, i) => (
+                      <th key={i} className="text-left text-purple-300 p-3 whitespace-nowrap">{ex.name}</th>
                     ))}
-                  </tbody>
-                </table>
-              </div>
+                    <th className="text-left text-purple-300 p-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allWorkouts.map((w, idx) => (
+                    <tr key={w.id} className={idx % 2 === 0 ? 'bg-white/5' : ''}>
+                      <td className="text-white p-3 whitespace-nowrap">{new Date(w.date).toLocaleDateString()}</td>
+                      <td className="text-purple-200 p-3">{w.profileName}</td>
+                      <td className="p-3">
+                        <span className="bg-purple-600 px-2 py-1 rounded text-white text-xs font-bold">{w.type}</span>
+                      </td>
+                      {w.exercises.map((ex, i) => {
+                        const bestSet = ex.sets.reduce((best, s) => {
+                          if (!s.reps) return best;
+                          if (!best.reps) return s;
+                          return (parseInt(s.reps) * (parseInt(s.weight) || 1)) > 
+                                 (parseInt(best.reps) * (parseInt(best.weight) || 1)) ? s : best;
+                        }, {});
+                        return (
+                          <td key={i} className="text-purple-200 p-3 text-xs">
+                            {bestSet.reps ? (
+                              <div>
+                                <div className="text-white font-bold">{bestSet.reps}r</div>
+                                {bestSet.weight && <div>{bestSet.weight}lb</div>}
+                                {bestSet.effort !== null && <div className="text-purple-400">{EFFORT[bestSet.effort].split(' ')[0]}</div>}
+                              </div>
+                            ) : '-'}
+                          </td>
+                        );
+                      })}
+                      <td className="p-3">
+                        {w.profileId === currentProfile.id && (
+                          <button onClick={() => deleteWorkout(w.id)} className="text-red-400 hover:text-red-300">
+                            <Trash2 size={16} />
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           ) : (
-            <div className="text-center text-purple-200 mt-12">
-              <TrendingUp size={48} className="mx-auto mb-4 opacity-50" />
-              <p>No workouts yet. Start your first one!</p>
-            </div>
+            <div className="text-center text-purple-300 py-12">No workouts yet!</div>
           )}
         </div>
       </div>
     );
   }
 
-  if (view === 'history' && viewingWorkout) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-6">
-            <button
-              onClick={() => { setView('home'); setViewingWorkout(null); }}
-              className="text-purple-200 hover:text-white flex items-center gap-2 mb-4"
-            >
-              <ChevronLeft size={20} />
-              Back to History
-            </button>
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-white">Workout {viewingWorkout.type}</h1>
-                <p className="text-purple-200">{new Date(viewingWorkout.date).toLocaleDateString()}</p>
-              </div>
-              <button
-                onClick={() => deleteWorkout(viewingWorkout.id)}
-                className="text-red-400 hover:text-red-300 p-2"
-              >
-                <Trash2 size={24} />
-              </button>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {viewingWorkout.exercises.map((exercise, exIdx) => (
-              <div key={exIdx} className="bg-white/10 backdrop-blur-lg rounded-lg p-5 border border-white/20">
-                <h3 className="text-white font-semibold text-lg mb-4">{exercise.name}</h3>
-                <div className="space-y-3">
-                  {exercise.sets.map((set, setIdx) => (
-                    <div key={setIdx} className="bg-white/5 rounded-lg p-3">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-purple-200 text-sm">Set {setIdx + 1} • Target: {set.target}</span>
-                        {set.note && <span className="text-purple-300 text-xs">{set.note}</span>}
-                      </div>
-                      {set.reps ? (
-                        <div className="grid grid-cols-4 gap-2 text-sm">
-                          <div>
-                            <div className="text-purple-300 text-xs">Reps</div>
-                            <div className="text-white font-semibold">{set.reps}</div>
-                          </div>
-                          <div>
-                            <div className="text-purple-300 text-xs">Weight</div>
-                            <div className="text-white font-semibold">{set.weight || '-'}</div>
-                          </div>
-                          <div>
-                            <div className="text-purple-300 text-xs">Effort</div>
-                            <div className="text-white font-semibold">
-                              {set.effort !== null ? effortLevels[set.effort].label : '-'}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-purple-300 text-xs">Rest</div>
-                            <div className="text-white font-semibold">{set.rest ? `${set.rest}s` : '-'}</div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-purple-300 text-sm italic">Not completed</div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (view === 'workout' && currentWorkout) {
-    const currentExercise = currentWorkout.exercises[selectedExercise];
+  // WORKOUT SCREEN
+  if (screen === 'workout' && activeWorkout) {
+    const exercise = activeWorkout.exercises[exerciseIndex];
+    const prevWorkout = getPreviousWorkout();
+    const prevExercise = prevWorkout?.exercises[exerciseIndex];
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-        <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-white/10 p-4 z-10">
-          <div className="max-w-4xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={cancelWorkout}
-                className="text-purple-200 hover:text-white transition"
-              >
+        <div className="sticky top-0 bg-slate-900/95 backdrop-blur p-4 border-b border-white/20 z-10">
+          <div className="max-w-4xl mx-auto flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <button onClick={exitWorkout} className="text-purple-300 hover:text-white">
                 <ChevronLeft size={24} />
               </button>
               <div>
-                <h2 className="text-white font-semibold text-lg">{currentExercise.name}</h2>
-                <p className="text-purple-200 text-sm">
-                  Workout {currentWorkout.type} • Exercise {selectedExercise + 1} of {currentWorkout.exercises.length}
-                </p>
+                <h2 className="text-white font-bold text-lg">{exercise.name}</h2>
+                <p className="text-purple-300 text-sm">Workout {activeWorkout.type} • {exerciseIndex + 1}/{activeWorkout.exercises.length}</p>
               </div>
             </div>
-            <button
-              onClick={saveWorkout}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-green-700"
-            >
-              <Save size={20} />
-              Save
-            </button>
+            <div className="flex gap-2">
+              <button onClick={exitWorkout} className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                Exit
+              </button>
+              <button onClick={saveWorkout} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2">
+                <Save size={18} />
+                Save
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto p-4">
-          <div className="space-y-4 mb-24">
-            {currentExercise.sets.map((set, setIdx) => (
-              <div key={setIdx} className="bg-white/10 backdrop-blur-lg rounded-lg p-5 border border-white/20">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-white font-semibold text-lg">Set {setIdx + 1}</h3>
-                    <p className="text-purple-200 text-sm">Target: {set.target} {set.note && `• ${set.note}`}</p>
+        <div className="max-w-4xl mx-auto p-4 pb-32">
+          {prevExercise && (
+            <div className="mb-6 bg-blue-900/30 border border-blue-500/30 rounded-lg p-4">
+              <h3 className="text-blue-300 font-semibold mb-3 flex items-center gap-2">
+                <TrendingUp size={18} />
+                Last Time: {new Date(prevWorkout.date).toLocaleDateString()}
+              </h3>
+              <div className="grid grid-cols-3 gap-3">
+                {prevExercise.sets.map((s, i) => (
+                  <div key={i} className="bg-blue-950/50 rounded p-3 text-sm">
+                    <div className="text-blue-200 mb-1">Set {i + 1}</div>
+                    {s.reps ? (
+                      <>
+                        <div className="text-white font-bold">{s.reps} reps</div>
+                        {s.weight && <div className="text-blue-300">{s.weight} lbs</div>}
+                        {s.effort !== null && <div className="text-blue-400 text-xs">{EFFORT[s.effort]}</div>}
+                      </>
+                    ) : (
+                      <div className="text-blue-400 italic">Skipped</div>
+                    )}
                   </div>
-                </div>
+                ))}
+              </div>
+            </div>
+          )}
 
+          <div className="space-y-4">
+            {exercise.sets.map((set, i) => (
+              <div key={i} className="bg-white/10 border border-white/20 rounded-lg p-5">
+                <h3 className="text-white font-semibold mb-4">Set {i + 1} • Target: {exercise.target}</h3>
+                
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   <div>
-                    <label className="text-purple-200 text-sm block mb-1">Reps</label>
+                    <label className="text-purple-300 text-sm block mb-1">Reps</label>
                     <input
                       type="number"
                       value={set.reps}
-                      onChange={(e) => updateSet(selectedExercise, setIdx, 'reps', e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      onChange={e => updateSet(i, 'reps', e.target.value)}
+                      className="w-full bg-white/10 border border-white/20 rounded px-3 py-2 text-white text-lg"
                       placeholder="0"
                     />
                   </div>
                   <div>
-                    <label className="text-purple-200 text-sm block mb-1">Weight (lbs)</label>
+                    <label className="text-purple-300 text-sm block mb-1">Weight (lbs)</label>
                     <input
                       type="number"
                       value={set.weight}
-                      onChange={(e) => updateSet(selectedExercise, setIdx, 'weight', e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      onChange={e => updateSet(i, 'weight', e.target.value)}
+                      className="w-full bg-white/10 border border-white/20 rounded px-3 py-2 text-white text-lg"
                       placeholder="0"
                     />
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="text-purple-200 text-sm block mb-2">Effort Level</label>
-                  <div className="grid grid-cols-4 gap-2">
-                    {effortLevels.map(level => (
-                      <button
-                        key={level.value}
-                        onClick={() => updateSet(selectedExercise, setIdx, 'effort', level.value)}
-                        className={`py-3 rounded-lg text-sm font-medium transition ${
-                          set.effort === level.value
-                            ? 'bg-purple-600 text-white'
-                            : 'bg-white/10 text-purple-200 hover:bg-white/20'
-                        }`}
-                      >
-                        <div>{level.label}</div>
-                        <div className="text-xs opacity-75">{level.desc}</div>
-                      </button>
-                    ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-purple-200 text-sm block mb-1">Rest (seconds)</label>
-                  <input
-                    type="number"
-                    value={set.rest}
-                    onChange={(e) => updateSet(selectedExercise, setIdx, 'rest', e.target.value)}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="60"
-                  />
+                  <label className="text-purple-300 text-sm block mb-2">Effort</label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {EFFORT.map((label, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => updateSet(i, 'effort', idx)}
+                        className={`py-2 px-1 rounded text-xs ${
+                          set.effort === idx 
+                            ? 'bg-purple-600 text-white' 
+                            : 'bg-white/10 text-purple-300 hover:bg-white/20'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
 
-          <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-white/10 p-4">
-            <div className="max-w-4xl mx-auto flex gap-3">
-              {selectedExercise > 0 && (
-                <button
-                  onClick={() => setSelectedExercise(selectedExercise - 1)}
-                  className="flex-1 bg-white/10 text-white py-3 rounded-lg font-semibold hover:bg-white/20"
-                >
-                  Previous
-                </button>
-              )}
-              {selectedExercise < currentWorkout.exercises.length - 1 ? (
-                <button
-                  onClick={() => setSelectedExercise(selectedExercise + 1)}
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:from-purple-700 hover:to-pink-700"
-                >
-                  Next Exercise
-                  <ChevronRight size={20} />
-                </button>
-              ) : (
-                <button
-                  onClick={saveWorkout}
-                  className="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-green-700"
-                >
-                  <Save size={20} />
-                  Complete Workout
-                </button>
-              )}
-            </div>
+        <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-t border-white/20 p-4">
+          <div className="max-w-4xl mx-auto flex gap-3">
+            {exerciseIndex > 0 && (
+              <button
+                onClick={() => setExerciseIndex(exerciseIndex - 1)}
+                className="flex-1 bg-white/10 text-white py-3 rounded-lg font-semibold hover:bg-white/20"
+              >
+                Previous
+              </button>
+            )}
+            {exerciseIndex < activeWorkout.exercises.length - 1 ? (
+              <button
+                onClick={() => setExerciseIndex(exerciseIndex + 1)}
+                className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 flex items-center justify-center gap-2"
+              >
+                Next <ChevronRight size={20} />
+              </button>
+            ) : (
+              <button
+                onClick={saveWorkout}
+                className="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 flex items-center justify-center gap-2"
+              >
+                <Save size={20} /> Complete
+              </button>
+            )}
           </div>
         </div>
       </div>
