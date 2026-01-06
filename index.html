@@ -1,9 +1,337 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <h1>Hello World!</h1>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const WORKOUTS = {
+            A: ['Australian Pullups', 'Goblet Squats', 'Superman Lateral Raise', 'Pushups', 'Glute Bridge Walkout', 'Deadlift Romanian', 'Hanging Knee Raises', 'Scapular Shrugs', 'Bench Curls'],
+            B: ['Pull-ups', 'Bulgarian Split Squats', 'Pike Push-ups', 'Dips', 'Nordic Curls', 'Single Leg Deadlift', 'Leg Raises', 'Plank'],
+            C: ['Archer Push-ups', 'Pistol Squats', 'Handstand Push-ups', 'Diamond Push-ups', 'Single Leg Glute Bridge', 'L-Sit Hold', 'Windshield Wipers', 'Face Pulls']
+        };
+
+        function App() {
+            const [page, setPage] = useState('login');
+            const [userName, setUserName] = useState('');
+            const [currentUser, setCurrentUser] = useState(null);
+            const [workouts, setWorkouts] = useState([]);
+            const [activeWorkout, setActiveWorkout] = useState(null);
+            const [exerciseIdx, setExerciseIdx] = useState(0);
+
+            useEffect(() => {
+                const saved = localStorage.getItem('workouts');
+                if (saved) setWorkouts(JSON.parse(saved));
+            }, []);
+
+            const saveWorkouts = (list) => {
+                setWorkouts(list);
+                localStorage.setItem('workouts', JSON.stringify(list));
+            };
+
+            const login = () => {
+                if (userName.trim()) {
+                    setCurrentUser(userName.trim());
+                    setPage('home');
+                }
+            };
+
+            const startWorkout = (type) => {
+                const exercises = WORKOUTS[type].map(name => ({
+                    name,
+                    sets: [
+                        { reps: '', weight: '', effort: '' },
+                        { reps: '', weight: '', effort: '' },
+                        { reps: '', weight: '', effort: '' }
+                    ]
+                }));
+                setActiveWorkout({
+                    id: Date.now(),
+                    user: currentUser,
+                    type,
+                    date: new Date().toLocaleDateString(),
+                    exercises
+                });
+                setExerciseIdx(0);
+                setPage('workout');
+            };
+
+            const updateSet = (setIdx, field, value) => {
+                const updated = {...activeWorkout};
+                updated.exercises[exerciseIdx].sets[setIdx][field] = value;
+                setActiveWorkout(updated);
+            };
+
+            const saveWorkout = () => {
+                saveWorkouts([...workouts, activeWorkout]);
+                setActiveWorkout(null);
+                setExerciseIdx(0);
+                setPage('home');
+            };
+
+            const exitWorkout = () => {
+                if (confirm('Exit without saving?')) {
+                    setActiveWorkout(null);
+                    setExerciseIdx(0);
+                    setPage('home');
+                }
+            };
+
+            const deleteWorkout = (id) => {
+                if (confirm('Delete this workout?')) {
+                    saveWorkouts(workouts.filter(w => w.id !== id));
+                }
+            };
+
+            // LOGIN PAGE
+            if (page === 'login') {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+                        <div className="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-8 max-w-md w-full">
+                            <h1 className="text-4xl font-bold text-white text-center mb-8">💪 Workout Tracker</h1>
+                            <input
+                                type="text"
+                                value={userName}
+                                onChange={e => setUserName(e.target.value)}
+                                onKeyPress={e => e.key === 'Enter' && login()}
+                                placeholder="Enter your name"
+                                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white text-lg mb-4 placeholder-purple-300"
+                            />
+                            <button
+                                onClick={login}
+                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-bold text-lg hover:from-purple-700 hover:to-pink-700"
+                            >
+                                Start
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            // HOME PAGE
+            if (page === 'home') {
+                const myWorkouts = workouts.filter(w => w.user === currentUser);
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="flex justify-between items-center mb-8">
+                                <h1 className="text-3xl font-bold text-white">Hey {currentUser}! 💪</h1>
+                                <button onClick={() => { setCurrentUser(null); setPage('login'); }} className="text-purple-300 hover:text-white">
+                                    Logout
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-4 gap-4 mb-8">
+                                <div className="bg-white/10 border border-white/20 rounded-lg p-4">
+                                    <div className="text-purple-300 text-sm">Total</div>
+                                    <div className="text-white text-3xl font-bold">{myWorkouts.length}</div>
+                                </div>
+                                <div className="bg-white/10 border border-white/20 rounded-lg p-4">
+                                    <div className="text-purple-300 text-sm">Workout A</div>
+                                    <div className="text-white text-3xl font-bold">{myWorkouts.filter(w => w.type === 'A').length}</div>
+                                </div>
+                                <div className="bg-white/10 border border-white/20 rounded-lg p-4">
+                                    <div className="text-purple-300 text-sm">Workout B</div>
+                                    <div className="text-white text-3xl font-bold">{myWorkouts.filter(w => w.type === 'B').length}</div>
+                                </div>
+                                <div className="bg-white/10 border border-white/20 rounded-lg p-4">
+                                    <div className="text-purple-300 text-sm">Workout C</div>
+                                    <div className="text-white text-3xl font-bold">{myWorkouts.filter(w => w.type === 'C').length}</div>
+                                </div>
+                            </div>
+
+                            <h2 className="text-xl font-bold text-white mb-4">Start Workout</h2>
+                            <div className="grid grid-cols-3 gap-4 mb-8">
+                                {['A', 'B', 'C'].map(type => (
+                                    <button
+                                        key={type}
+                                        onClick={() => startWorkout(type)}
+                                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-8 rounded-lg text-2xl font-bold hover:from-purple-700 hover:to-pink-700"
+                                    >
+                                        Workout {type}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <h2 className="text-xl font-bold text-white mb-4">History</h2>
+                            {workouts.length > 0 ? (
+                                <div className="bg-white/10 border border-white/20 rounded-lg overflow-x-auto">
+                                    <table className="w-full">
+                                        <thead className="bg-white/5">
+                                            <tr>
+                                                <th className="text-left text-purple-300 p-3 text-sm">Date</th>
+                                                <th className="text-left text-purple-300 p-3 text-sm">User</th>
+                                                <th className="text-left text-purple-300 p-3 text-sm">Type</th>
+                                                {WORKOUTS.A.map((ex, i) => (
+                                                    <th key={i} className="text-left text-purple-300 p-3 text-sm whitespace-nowrap">{ex}</th>
+                                                ))}
+                                                <th className="text-left text-purple-300 p-3 text-sm">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {workouts.map((w, idx) => (
+                                                <tr key={w.id} className={idx % 2 === 0 ? 'bg-white/5' : ''}>
+                                                    <td className="text-white p-3 text-sm whitespace-nowrap">{w.date}</td>
+                                                    <td className="text-purple-200 p-3 text-sm">{w.user}</td>
+                                                    <td className="p-3">
+                                                        <span className="bg-purple-600 px-2 py-1 rounded text-white text-xs font-bold">{w.type}</span>
+                                                    </td>
+                                                    {w.exercises.map((ex, i) => {
+                                                        const bestSet = ex.sets.reduce((best, s) => {
+                                                            if (!s.reps) return best;
+                                                            if (!best.reps) return s;
+                                                            return (parseInt(s.reps) * (parseInt(s.weight) || 1)) > (parseInt(best.reps) * (parseInt(best.weight) || 1)) ? s : best;
+                                                        }, {});
+                                                        return (
+                                                            <td key={i} className="text-purple-200 p-3 text-xs">
+                                                                {bestSet.reps ? (
+                                                                    <div>
+                                                                        <div className="text-white font-bold">{bestSet.reps}r</div>
+                                                                        {bestSet.weight && <div>{bestSet.weight}lb</div>}
+                                                                    </div>
+                                                                ) : '-'}
+                                                            </td>
+                                                        );
+                                                    })}
+                                                    <td className="p-3">
+                                                        {w.user === currentUser && (
+                                                            <button onClick={() => deleteWorkout(w.id)} className="text-red-400 hover:text-red-300 text-sm">
+                                                                Delete
+                                                            </button>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ) : (
+                                <div className="text-center text-purple-300 py-12">No workouts yet!</div>
+                            )}
+                        </div>
+                    </div>
+                );
+            }
+
+            // WORKOUT PAGE
+            if (page === 'workout' && activeWorkout) {
+                const exercise = activeWorkout.exercises[exerciseIdx];
+                const prevWorkout = workouts.filter(w => w.type === activeWorkout.type && w.user === currentUser && w.id !== activeWorkout.id)[0];
+                const prevExercise = prevWorkout?.exercises[exerciseIdx];
+
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+                        <div className="sticky top-0 bg-slate-900/95 backdrop-blur border-b border-white/20 p-4">
+                            <div className="max-w-4xl mx-auto flex justify-between items-center">
+                                <div>
+                                    <h2 className="text-white font-bold text-lg">{exercise.name}</h2>
+                                    <p className="text-purple-300 text-sm">Workout {activeWorkout.type} • {exerciseIdx + 1}/{activeWorkout.exercises.length}</p>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button onClick={exitWorkout} className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                                        Exit
+                                    </button>
+                                    <button onClick={saveWorkout} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="max-w-4xl mx-auto p-4 pb-32">
+                            {prevExercise && (
+                                <div className="mb-6 bg-blue-900/30 border border-blue-500/30 rounded-lg p-4">
+                                    <h3 className="text-blue-300 font-semibold mb-3">Last Time: {prevWorkout.date}</h3>
+                                    <div className="grid grid-cols-3 gap-3">
+                                        {prevExercise.sets.map((s, i) => (
+                                            <div key={i} className="bg-blue-950/50 rounded p-3">
+                                                <div className="text-blue-200 text-sm mb-1">Set {i + 1}</div>
+                                                {s.reps ? (
+                                                    <>
+                                                        <div className="text-white font-bold">{s.reps} reps</div>
+                                                        {s.weight && <div className="text-blue-300 text-sm">{s.weight} lbs</div>}
+                                                    </>
+                                                ) : (
+                                                    <div className="text-blue-400 text-sm italic">Skipped</div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="space-y-4">
+                                {exercise.sets.map((set, i) => (
+                                    <div key={i} className="bg-white/10 border border-white/20 rounded-lg p-5">
+                                        <h3 className="text-white font-semibold mb-4">Set {i + 1}</h3>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="text-purple-300 text-sm block mb-1">Reps</label>
+                                                <input
+                                                    type="number"
+                                                    value={set.reps}
+                                                    onChange={e => updateSet(i, 'reps', e.target.value)}
+                                                    className="w-full bg-white/10 border border-white/20 rounded px-3 py-2 text-white text-lg"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="text-purple-300 text-sm block mb-1">Weight (lbs)</label>
+                                                <input
+                                                    type="number"
+                                                    value={set.weight}
+                                                    onChange={e => updateSet(i, 'weight', e.target.value)}
+                                                    className="w-full bg-white/10 border border-white/20 rounded px-3 py-2 text-white text-lg"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-t border-white/20 p-4">
+                            <div className="max-w-4xl mx-auto flex gap-3">
+                                {exerciseIdx > 0 && (
+                                    <button
+                                        onClick={() => setExerciseIdx(exerciseIdx - 1)}
+                                        className="flex-1 bg-white/10 text-white py-3 rounded-lg font-semibold hover:bg-white/20"
+                                    >
+                                        Previous
+                                    </button>
+                                )}
+                                {exerciseIdx < activeWorkout.exercises.length - 1 ? (
+                                    <button
+                                        onClick={() => setExerciseIdx(exerciseIdx + 1)}
+                                        className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700"
+                                    >
+                                        Next
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={saveWorkout}
+                                        className="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700"
+                                    >
+                                        Complete
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
 </body>
 </html>
