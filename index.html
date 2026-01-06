@@ -8,15 +8,9 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-        }
-        .font-serif {
-            font-family: 'Crimson Text', serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
     </style>
 </head>
@@ -136,21 +130,21 @@
             // LOGIN PAGE
             if (page === 'login') {
                 return (
-                    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-stone-100 to-emerald-50 flex items-center justify-center p-4">
-                        <div className="bg-white/80 backdrop-blur shadow-xl rounded-3xl p-10 max-w-md w-full border border-amber-200/50">
-                            <h1 className="text-5xl font-serif font-bold text-amber-900 text-center mb-3">Workout Tracker</h1>
-                            <p className="text-center text-stone-600 mb-8 text-sm font-light">Track your progress, honor your journey</p>
+                    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-100 flex items-center justify-center p-4">
+                        <div className="bg-white shadow-2xl rounded-3xl p-12 max-w-md w-full">
+                            <h1 className="text-5xl font-light text-emerald-900 text-center mb-3 tracking-tight">Workout Tracker</h1>
+                            <p className="text-center text-stone-600 mb-10 text-sm">Track your journey</p>
                             <input
                                 type="text"
                                 value={userName}
                                 onChange={e => setUserName(e.target.value)}
                                 onKeyPress={e => e.key === 'Enter' && login()}
                                 placeholder="Enter your name"
-                                className="w-full bg-stone-50 border border-stone-300 rounded-xl px-5 py-3 text-stone-800 text-base mb-4 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                className="w-full bg-gray-50 border-2 border-gray-200 rounded-2xl px-5 py-4 text-stone-800 text-base mb-5 placeholder-gray-400 focus:outline-none focus:border-emerald-500 transition"
                             />
                             <button
                                 onClick={login}
-                                className="w-full bg-gradient-to-r from-amber-600 to-orange-500 text-white py-3 rounded-xl font-medium text-base hover:from-amber-700 hover:to-orange-600 shadow-md transition-all"
+                                className="w-full bg-emerald-600 text-white py-4 rounded-2xl font-medium text-base hover:bg-emerald-700 shadow-lg transition-all"
                             >
                                 Begin
                             </button>
@@ -163,73 +157,73 @@
             if (page === 'home') {
                 const myWorkouts = workouts.filter(w => w.user === currentUser);
                 return (
-                    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-stone-100 to-emerald-50 p-6">
+                    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-100 p-6">
                         <div className="max-w-7xl mx-auto">
-                            <div className="flex justify-between items-center mb-8">
+                            <div className="flex justify-between items-center mb-10">
                                 <div>
-                                    <h1 className="text-4xl font-serif font-bold text-amber-900">Hello, {currentUser}</h1>
-                                    <p className="text-stone-600 font-light">Let's move with intention today</p>
+                                    <h1 className="text-4xl font-light text-emerald-900 tracking-tight">Hello, {currentUser}</h1>
+                                    <p className="text-gray-600 mt-1">Ready to move</p>
                                 </div>
-                                <button onClick={() => { setCurrentUser(null); setPage('login'); }} className="text-stone-600 hover:text-amber-800 font-medium transition">
+                                <button onClick={() => { setCurrentUser(null); setPage('login'); }} className="text-gray-600 hover:text-emerald-800 transition">
                                     Switch Profile
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-4 gap-4 mb-8">
-                                <div className="bg-white/70 backdrop-blur border border-amber-200/50 rounded-2xl p-5 shadow-sm">
-                                    <div className="text-stone-600 text-sm font-light mb-1">Total Workouts</div>
-                                    <div className="text-amber-900 text-4xl font-serif font-bold">{myWorkouts.length}</div>
+                            <div className="grid grid-cols-4 gap-5 mb-10">
+                                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+                                    <div className="text-gray-500 text-sm mb-1">Total</div>
+                                    <div className="text-emerald-900 text-4xl font-light">{myWorkouts.length}</div>
                                 </div>
-                                <div className="bg-white/70 backdrop-blur border border-amber-200/50 rounded-2xl p-5 shadow-sm">
-                                    <div className="text-stone-600 text-sm font-light mb-1">Workout A</div>
-                                    <div className="text-amber-900 text-4xl font-serif font-bold">{myWorkouts.filter(w => w.type === 'A').length}</div>
+                                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+                                    <div className="text-gray-500 text-sm mb-1">Workout A</div>
+                                    <div className="text-emerald-900 text-4xl font-light">{myWorkouts.filter(w => w.type === 'A').length}</div>
                                 </div>
-                                <div className="bg-white/70 backdrop-blur border border-amber-200/50 rounded-2xl p-5 shadow-sm">
-                                    <div className="text-stone-600 text-sm font-light mb-1">Workout B</div>
-                                    <div className="text-amber-900 text-4xl font-serif font-bold">{myWorkouts.filter(w => w.type === 'B').length}</div>
+                                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+                                    <div className="text-gray-500 text-sm mb-1">Workout B</div>
+                                    <div className="text-emerald-900 text-4xl font-light">{myWorkouts.filter(w => w.type === 'B').length}</div>
                                 </div>
-                                <div className="bg-white/70 backdrop-blur border border-amber-200/50 rounded-2xl p-5 shadow-sm">
-                                    <div className="text-stone-600 text-sm font-light mb-1">Workout C</div>
-                                    <div className="text-amber-900 text-4xl font-serif font-bold">{myWorkouts.filter(w => w.type === 'C').length}</div>
+                                <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+                                    <div className="text-gray-500 text-sm mb-1">Workout C</div>
+                                    <div className="text-emerald-900 text-4xl font-light">{myWorkouts.filter(w => w.type === 'C').length}</div>
                                 </div>
                             </div>
 
-                            <h2 className="text-2xl font-serif font-bold text-amber-900 mb-4">Start Your Practice</h2>
-                            <div className="grid grid-cols-3 gap-4 mb-10">
+                            <h2 className="text-2xl font-light text-emerald-900 mb-5 tracking-tight">Start Workout</h2>
+                            <div className="grid grid-cols-3 gap-5 mb-12">
                                 {['A', 'B', 'C'].map(type => (
                                     <button
                                         key={type}
                                         onClick={() => startWorkout(type)}
-                                        className="bg-gradient-to-br from-amber-600 to-orange-500 text-white py-10 rounded-2xl text-3xl font-serif font-bold hover:from-amber-700 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all"
+                                        className="bg-emerald-600 text-white py-12 rounded-2xl text-3xl font-light hover:bg-emerald-700 shadow-lg hover:shadow-xl transition-all tracking-wide"
                                     >
                                         Workout {type}
                                     </button>
                                 ))}
                             </div>
 
-                            <h2 className="text-2xl font-serif font-bold text-amber-900 mb-4">Your Journey</h2>
+                            <h2 className="text-2xl font-light text-emerald-900 mb-5 tracking-tight">History</h2>
                             {workouts.length > 0 ? (
-                                <div className="bg-white/70 backdrop-blur border border-amber-200/50 rounded-2xl overflow-hidden shadow-sm">
+                                <div className="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100">
                                     <div className="overflow-x-auto">
                                         <table className="w-full">
-                                            <thead className="bg-amber-100/50">
+                                            <thead className="bg-gray-50">
                                                 <tr>
-                                                    <th className="text-left text-stone-700 p-4 text-sm font-medium">Date</th>
-                                                    <th className="text-left text-stone-700 p-4 text-sm font-medium">User</th>
-                                                    <th className="text-left text-stone-700 p-4 text-sm font-medium">Type</th>
+                                                    <th className="text-left text-gray-700 p-4 text-sm font-medium">Date</th>
+                                                    <th className="text-left text-gray-700 p-4 text-sm font-medium">User</th>
+                                                    <th className="text-left text-gray-700 p-4 text-sm font-medium">Type</th>
                                                     {WORKOUTS.A.map((ex, i) => (
-                                                        <th key={i} className="text-left text-stone-700 p-4 text-sm font-medium whitespace-nowrap">{ex.name}</th>
+                                                        <th key={i} className="text-left text-gray-700 p-4 text-sm font-medium whitespace-nowrap">{ex.name}</th>
                                                     ))}
-                                                    <th className="text-left text-stone-700 p-4 text-sm font-medium">Actions</th>
+                                                    <th className="text-left text-gray-700 p-4 text-sm font-medium">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {workouts.map((w, idx) => (
-                                                    <tr key={w.id} className={idx % 2 === 0 ? 'bg-stone-50/30' : 'bg-white/30'}>
+                                                    <tr key={w.id} className={idx % 2 === 0 ? 'bg-emerald-50/30' : 'bg-white'}>
                                                         <td className="text-stone-800 p-4 text-sm whitespace-nowrap">{w.date}</td>
-                                                        <td className="text-stone-700 p-4 text-sm">{w.user}</td>
+                                                        <td className="text-gray-700 p-4 text-sm">{w.user}</td>
                                                         <td className="p-4">
-                                                            <span className="bg-amber-600 px-3 py-1 rounded-full text-white text-xs font-medium">{w.type}</span>
+                                                            <span className="bg-emerald-600 px-3 py-1 rounded-full text-white text-xs font-medium">{w.type}</span>
                                                         </td>
                                                         {w.exercises.map((ex, i) => {
                                                             const bestSet = ex.sets.reduce((best, s) => {
@@ -238,13 +232,13 @@
                                                                 return (parseInt(s.reps) * (parseInt(s.weight) || 1)) > (parseInt(best.reps) * (parseInt(best.weight) || 1)) ? s : best;
                                                             }, {});
                                                             return (
-                                                                <td key={i} className="text-stone-700 p-4 text-xs">
+                                                                <td key={i} className="text-gray-700 p-4 text-xs">
                                                                     {bestSet.reps ? (
                                                                         <div>
-                                                                            <div className="text-amber-900 font-semibold">{bestSet.reps}r</div>
-                                                                            {bestSet.weight && <div className="text-stone-600">{bestSet.weight}lb</div>}
+                                                                            <div className="text-emerald-900 font-semibold">{bestSet.reps}r</div>
+                                                                            {bestSet.weight && <div className="text-gray-600">{bestSet.weight}lb</div>}
                                                                         </div>
-                                                                    ) : <span className="text-stone-400">—</span>}
+                                                                    ) : <span className="text-gray-400">—</span>}
                                                                 </td>
                                                             );
                                                         })}
@@ -262,8 +256,8 @@
                                     </div>
                                 </div>
                             ) : (
-                                <div className="text-center text-stone-600 py-16 bg-white/50 rounded-2xl border border-amber-200/50">
-                                    <p className="font-light text-lg">Your journey begins now</p>
+                                <div className="text-center text-gray-600 py-20 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                                    <p className="text-lg">Your journey begins now</p>
                                 </div>
                             )}
                         </div>
@@ -278,18 +272,18 @@
                 const prevExercise = prevWorkout?.exercises[exerciseIdx];
 
                 return (
-                    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-stone-100 to-emerald-50">
-                        <div className="sticky top-0 bg-white/80 backdrop-blur border-b border-amber-200/50 p-4 shadow-sm z-10">
+                    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-100">
+                        <div className="sticky top-0 bg-white border-b border-gray-200 p-5 shadow-sm z-10">
                             <div className="max-w-4xl mx-auto flex justify-between items-center">
                                 <div>
-                                    <h2 className="text-amber-900 font-serif font-bold text-2xl">{exercise.name}</h2>
-                                    <p className="text-stone-600 text-sm font-light">Workout {activeWorkout.type} • {exerciseIdx + 1} of {activeWorkout.exercises.length}</p>
+                                    <h2 className="text-emerald-900 font-light text-2xl tracking-tight">{exercise.name}</h2>
+                                    <p className="text-gray-600 text-sm mt-1">Workout {activeWorkout.type} · Exercise {exerciseIdx + 1} of {activeWorkout.exercises.length}</p>
                                 </div>
-                                <div className="flex gap-2">
-                                    <button onClick={exitWorkout} className="bg-stone-300 text-stone-700 px-5 py-2 rounded-xl hover:bg-stone-400 font-medium transition">
+                                <div className="flex gap-3">
+                                    <button onClick={exitWorkout} className="bg-gray-200 text-gray-700 px-6 py-2 rounded-xl hover:bg-gray-300 transition">
                                         Exit
                                     </button>
-                                    <button onClick={saveWorkout} className="bg-gradient-to-r from-amber-600 to-orange-500 text-white px-5 py-2 rounded-xl hover:from-amber-700 hover:to-orange-600 font-medium shadow-md transition">
+                                    <button onClick={saveWorkout} className="bg-emerald-600 text-white px-6 py-2 rounded-xl hover:bg-emerald-700 shadow-md transition">
                                         Save
                                     </button>
                                 </div>
@@ -298,19 +292,19 @@
 
                         <div className="max-w-4xl mx-auto p-6 pb-32">
                             {prevExercise && (
-                                <div className="mb-6 bg-emerald-100/40 backdrop-blur border border-emerald-300/30 rounded-2xl p-5 shadow-sm">
-                                    <h3 className="text-emerald-800 font-serif font-semibold text-lg mb-3">Last Time: {prevWorkout.date}</h3>
-                                    <div className="grid grid-cols-3 gap-3">
+                                <div className="mb-6 bg-teal-50 border-2 border-teal-200 rounded-2xl p-6 shadow-sm">
+                                    <h3 className="text-teal-900 font-medium text-lg mb-4">Last time: {prevWorkout.date}</h3>
+                                    <div className="grid grid-cols-3 gap-4">
                                         {prevExercise.sets.map((s, i) => (
-                                            <div key={i} className="bg-white/60 rounded-xl p-4 border border-emerald-200/50">
-                                                <div className="text-emerald-700 text-sm font-medium mb-2">Set {i + 1}</div>
+                                            <div key={i} className="bg-white rounded-xl p-4 border border-teal-100">
+                                                <div className="text-teal-700 text-sm font-medium mb-2">Set {i + 1}</div>
                                                 {s.reps ? (
                                                     <>
-                                                        <div className="text-emerald-900 font-bold text-lg">{s.reps} reps</div>
-                                                        {s.weight && <div className="text-emerald-700 text-sm">{s.weight} lbs</div>}
+                                                        <div className="text-teal-900 font-semibold text-lg">{s.reps} reps</div>
+                                                        {s.weight && <div className="text-teal-700 text-sm mt-1">{s.weight} lbs</div>}
                                                     </>
                                                 ) : (
-                                                    <div className="text-emerald-600 text-sm italic">Skipped</div>
+                                                    <div className="text-teal-600 text-sm italic">Skipped</div>
                                                 )}
                                             </div>
                                         ))}
@@ -318,28 +312,28 @@
                                 </div>
                             )}
 
-                            <div className="space-y-4">
+                            <div className="space-y-5">
                                 {exercise.sets.map((set, i) => (
-                                    <div key={i} className="bg-white/70 backdrop-blur border border-amber-200/50 rounded-2xl p-6 shadow-sm">
-                                        <h3 className="text-amber-900 font-serif font-bold text-xl mb-1">Set {i + 1}</h3>
-                                        <p className="text-stone-600 text-sm font-light mb-5">Target: {exercise.target} reps</p>
+                                    <div key={i} className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+                                        <h3 className="text-emerald-900 font-light text-2xl mb-1">Set {i + 1}</h3>
+                                        <p className="text-gray-600 text-sm mb-5">Target: {exercise.target} reps</p>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label className="text-stone-700 text-sm font-medium block mb-2">Reps</label>
+                                                <label className="text-gray-700 text-sm font-medium block mb-2">Reps</label>
                                                 <input
                                                     type="number"
                                                     value={set.reps}
                                                     onChange={e => updateSet(i, 'reps', e.target.value)}
-                                                    className="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-3 text-stone-800 text-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                                    className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-3 text-stone-800 text-lg focus:outline-none focus:border-emerald-500 transition"
                                                 />
                                             </div>
                                             <div>
-                                                <label className="text-stone-700 text-sm font-medium block mb-2">Weight (lbs)</label>
+                                                <label className="text-gray-700 text-sm font-medium block mb-2">Weight (lbs)</label>
                                                 <input
                                                     type="number"
                                                     value={set.weight}
                                                     onChange={e => updateSet(i, 'weight', e.target.value)}
-                                                    className="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-3 text-stone-800 text-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                                    className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-3 text-stone-800 text-lg focus:outline-none focus:border-emerald-500 transition"
                                                 />
                                             </div>
                                         </div>
@@ -348,12 +342,12 @@
                             </div>
                         </div>
 
-                        <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur border-t border-amber-200/50 p-4 shadow-lg">
+                        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-5 shadow-lg">
                             <div className="max-w-4xl mx-auto flex gap-3">
                                 {exerciseIdx > 0 && (
                                     <button
                                         onClick={() => setExerciseIdx(exerciseIdx - 1)}
-                                        className="flex-1 bg-stone-200 text-stone-700 py-3 rounded-xl font-medium hover:bg-stone-300 transition"
+                                        className="flex-1 bg-gray-200 text-gray-700 py-4 rounded-xl font-medium hover:bg-gray-300 transition"
                                     >
                                         Previous
                                     </button>
@@ -361,14 +355,14 @@
                                 {exerciseIdx < activeWorkout.exercises.length - 1 ? (
                                     <button
                                         onClick={() => setExerciseIdx(exerciseIdx + 1)}
-                                        className="flex-1 bg-gradient-to-r from-amber-600 to-orange-500 text-white py-3 rounded-xl font-medium hover:from-amber-700 hover:to-orange-600 shadow-md transition"
+                                        className="flex-1 bg-emerald-600 text-white py-4 rounded-xl font-medium hover:bg-emerald-700 shadow-md transition"
                                     >
                                         Next Exercise
                                     </button>
                                 ) : (
                                     <button
                                         onClick={saveWorkout}
-                                        className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-500 text-white py-3 rounded-xl font-medium hover:from-emerald-700 hover:to-teal-600 shadow-md transition"
+                                        className="flex-1 bg-emerald-600 text-white py-4 rounded-xl font-medium hover:bg-emerald-700 shadow-md transition"
                                     >
                                         Complete Workout
                                     </button>
