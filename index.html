@@ -16,9 +16,37 @@
         const { useState, useEffect } = React;
 
         const WORKOUTS = {
-            A: ['Australian Pullups', 'Goblet Squats', 'Superman Lateral Raise', 'Pushups', 'Glute Bridge Walkout', 'Deadlift Romanian', 'Hanging Knee Raises', 'Scapular Shrugs', 'Bench Curls'],
-            B: ['Pull-ups', 'Bulgarian Split Squats', 'Pike Push-ups', 'Dips', 'Nordic Curls', 'Single Leg Deadlift', 'Leg Raises', 'Plank'],
-            C: ['Archer Push-ups', 'Pistol Squats', 'Handstand Push-ups', 'Diamond Push-ups', 'Single Leg Glute Bridge', 'L-Sit Hold', 'Windshield Wipers', 'Face Pulls']
+            A: [
+                { name: 'Australian Pullups', target: '8-10' },
+                { name: 'Goblet Squats', target: '8-12' },
+                { name: 'Superman Lateral Raise', target: '15' },
+                { name: 'Pushups', target: '20' },
+                { name: 'Glute Bridge Walkout', target: '10-15' },
+                { name: 'Deadlift Romanian', target: '8-12' },
+                { name: 'Hanging Knee Raises', target: '8-12' },
+                { name: 'Scapular Shrugs', target: '15' },
+                { name: 'Bench Curls', target: '8-14' }
+            ],
+            B: [
+                { name: 'Pull-ups', target: '5-8' },
+                { name: 'Bulgarian Split Squats', target: '8-12' },
+                { name: 'Pike Push-ups', target: '8-12' },
+                { name: 'Dips', target: '8-12' },
+                { name: 'Nordic Curls', target: '5-8' },
+                { name: 'Single Leg Deadlift', target: '8-12' },
+                { name: 'Leg Raises', target: '10-15' },
+                { name: 'Plank', target: '45-60s' }
+            ],
+            C: [
+                { name: 'Archer Push-ups', target: '6-10' },
+                { name: 'Pistol Squats', target: '5-8' },
+                { name: 'Handstand Push-ups', target: '3-8' },
+                { name: 'Diamond Push-ups', target: '10-15' },
+                { name: 'Single Leg Glute Bridge', target: '12-15' },
+                { name: 'L-Sit Hold', target: '15-30s' },
+                { name: 'Windshield Wipers', target: '8-12' },
+                { name: 'Face Pulls', target: '12-15' }
+            ]
         };
 
         function App() {
@@ -47,8 +75,9 @@
             };
 
             const startWorkout = (type) => {
-                const exercises = WORKOUTS[type].map(name => ({
-                    name,
+                const exercises = WORKOUTS[type].map(ex => ({
+                    name: ex.name,
+                    target: ex.target,
                     sets: [
                         { reps: '', weight: '', effort: '' },
                         { reps: '', weight: '', effort: '' },
@@ -173,7 +202,7 @@
                                                 <th className="text-left text-purple-300 p-3 text-sm">User</th>
                                                 <th className="text-left text-purple-300 p-3 text-sm">Type</th>
                                                 {WORKOUTS.A.map((ex, i) => (
-                                                    <th key={i} className="text-left text-purple-300 p-3 text-sm whitespace-nowrap">{ex}</th>
+                                                    <th key={i} className="text-left text-purple-300 p-3 text-sm whitespace-nowrap">{ex.name}</th>
                                                 ))}
                                                 <th className="text-left text-purple-300 p-3 text-sm">Actions</th>
                                             </tr>
@@ -273,7 +302,8 @@
                             <div className="space-y-4">
                                 {exercise.sets.map((set, i) => (
                                     <div key={i} className="bg-white/10 border border-white/20 rounded-lg p-5">
-                                        <h3 className="text-white font-semibold mb-4">Set {i + 1}</h3>
+                                        <h3 className="text-white font-semibold mb-1">Set {i + 1}</h3>
+                                        <p className="text-purple-300 text-sm mb-4">Target: {exercise.target} reps</p>
                                         <div className="grid grid-cols-2 gap-3">
                                             <div>
                                                 <label className="text-purple-300 text-sm block mb-1">Reps</label>
